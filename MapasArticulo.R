@@ -4,7 +4,7 @@
 # # Fecha: Marzo 25
 # # Versión de R: 4.0.4
 ###############################################################################
-
+rm(list = ls())
 #Librerías a usar
 library(cartography)
 library(ggplot2) 
@@ -14,7 +14,7 @@ library(sf)
 # Establecer rutas de entrada y salida de datos y gráficos
 rutas<-list(barrio=c(here("Datos/Barrios_Pop.shp")),
             vias=c(here("Datos/Vias.shp")),
-            figuras=c(here("Gráficos/")))
+            figuras=c(here("Gráficos/")));rutas
 # Lectura de datos
 pobla<-read_sf(rutas$barrio)
 # Vías: Contexto para mapas
@@ -67,20 +67,43 @@ m1<-ggplot(pobla) +
 # Mapa de símbolos proporcionales  #
 #                                  #
 
-m2<-ggplot()+
-  annotation_scale()+
-  annotation_north_arrow(location = "tr", which_north = "true", 
-                         pad_x = unit(0.05, "in"), pad_y = unit(0.2, "in"),
-                         style = north_arrow_fancy_orienteering) +
-  geom_sf(data = vias,fill="gray20",color="black", alpha = 0.2)+
-  geom_sf(data = pobla,fill="#252525",color="black", alpha = 0.8)+
-  geom_point(data = centro,col="#bd0026", aes(x =lon, y=lat,size = Pop_Tot))+
-  theme_gray()+
-  scale_size_continuous(range = c(2, 25), name = "Población total")+
-  xlab("Longitud") + ylab("Latitud")+
-  ggtitle("Número de habitantes por sector catastral",
-          subtitle = "Símbolos proporcionales")+
-  coord_sf(xlim = c(st_bbox(pobla)[c(1,3)]), ylim = c(st_bbox(pobla)[c(2,4)]))
+# Guardar
+jpeg(filename = paste(rutas$figuras,"Símbolos proporcionales.jpeg",sep=""), width = 180, height = 180,
+     units = "mm", res = 300)
+# path to the geopackage file embedded in cartographytilesLayer(map1)
+plot(st_geometry(pobla),
+     border = "black",
+     bg = "grey90", 
+     lwd = 1,
+     xlim = c(st_bbox(pobla)[c(1,3)]), 
+     ylim = c(st_bbox(pobla)[c(2,4)]))
+
+plot(st_geometry(vias),
+     col = "grey40", 
+     border = "grey",
+     bg = "grey90", 
+     lwd = .1,
+     add = TRUE,
+     xlim = c(st_bbox(pobla)[c(1,3)]), 
+     ylim = c(st_bbox(pobla)[c(2,4)]))
+# plot Símbolos proporcionales
+propSymbolsLayer(
+  x = pobla, 
+  var = names(pobla)[3], 
+  inches = 0.2, 
+  symbols = "circle",
+  col = "brown",
+  legend.pos = "topright",  
+  legend.title.txt = "Población total"
+)
+# Información de contexto
+layoutLayer(title = "Número de habitantes por sector catastral",
+            sources = "Fuente: SISBEN (2016)",
+            author = paste0("Elaboración propia\nDatum:CTM12\nLibrería R: cartography ", packageVersion("cartography")),
+            frame = FALSE, north = FALSE, tabtitle = TRUE)
+# Flecha norte
+north(pos = "topleft",south = FALSE)
+dev.off()
 
 
 #                                  #  
