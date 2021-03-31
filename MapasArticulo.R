@@ -130,7 +130,7 @@ propSymbolsLayer(
   inches = 0.2, 
   symbols = "circle",
   col = "brown",
-  legend.pos = "topright",  
+  legend.pos = "bottomright",  
   legend.title.txt = "Población total\n(Simbolos proporcionales)"
 )
 # Información de contexto
