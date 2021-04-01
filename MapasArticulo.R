@@ -6,11 +6,19 @@
 ###############################################################################
 
 #Librerías a usar
-library(cartography)
-library(ggplot2) 
-library(here)
-library(ggspatial)
-library(sf) 
+packages = c("ggspatial", 
+             "here",
+             "sf", "ggplot2")
+## Identificar si las librerías están instaladas y disponibles
+package.check <- lapply(
+  packages,
+  FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  }
+)
 # Establecer rutas de entrada y salida de datos y gráficos
 rutas<-list(barrio=c(here("Datos/Barrios_Pop.shp")),
             vias=c(here("Datos/Vias.shp")),
@@ -32,7 +40,6 @@ centro$lon<-y[,1]
 centro$lat<-y[,2]
 rm(y)
 
-
 #              # 
  # Histograma #
   #          #
@@ -42,7 +49,6 @@ Barras<-Barras + geom_bar(stat = "identity",fill="darksalmon")+coord_flip()+
   ggtitle("Número de habitantes por sector catastral") + 
   xlab("Barrios") + ylab("N° habitantes")
   
-
 #                           #
  # Mapa suave variabilidad #
   #                       #
