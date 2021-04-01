@@ -1,4 +1,4 @@
-# Creación de mapas temáticos con mediante R
+# Creación de mapas temáticos con R
 
 R como lenguaje tiene una gran cantidad de características para la manipulación y análisis de datos, la información geográfica no escapa a este espectro. R cuenta con una gran cantidad de librerías útiles para la construcción y análisis de información geográfica, pero también para su diagramación y comunicación mediante mapas.
 
