@@ -6,11 +6,20 @@
 ###############################################################################
 rm(list = ls())
 #Librerías a usar
-library(cartography)
-library(ggplot2) 
-library(here)
-library(ggspatial)
-library(sf) 
+packages = c("cartography", 
+             "here",
+             "sf", "ggplot2")
+
+## Identificar si las librerías están instaladas y disponibles
+package.check <- lapply(
+  packages,
+  FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE)
+      library(x, character.only = TRUE)
+    }
+  }
+)
 # Establecer rutas de entrada y salida de datos y gráficos
 rutas<-list(barrio=c(here("Datos/Barrios_Pop.shp")),
             vias=c(here("Datos/Vias.shp")),
@@ -62,8 +71,10 @@ ggsave(filename = "Barras.jpeg",
 
 # Guardar
 jpeg(filename = paste(rutas$figuras,"Coropletas por Cortes geométricos.jpeg",sep=""), 
-     width = 180, height = 180,
-     units = "mm", res = 300)
+     width = 150, 
+     height = 150,
+     units = "mm",
+     res = 300)
 
 
 plot(st_geometry(vias),
@@ -90,11 +101,11 @@ choroLayer(
 # layout
 layoutLayer(title = "Número de habitantes por sector catastral",
             sources = "Fuente: SISBEN (2016)",
-            author = paste0("Elaboración propia\nDatum:CTM12\nLibrería R: cartography ", 
+            author = paste0("Elaboración propia\nDatum: CTM12\nLibrería R: cartography ", 
                             packageVersion("cartography")), 
             frame = FALSE, north = FALSE, tabtitle = TRUE)
 
-north(pos = "topleft")
+north(pos = "topleft",south = TRUE)
 
 dev.off()
 
@@ -104,7 +115,7 @@ dev.off()
 
 # Guardar
 jpeg(filename = paste(rutas$figuras,"Símbolos proporcionales.jpeg",sep=""), 
-     width = 180, height = 180,
+     width = 160, height = 160,
      units = "mm", res = 300)
 
 # Mapa simbolos prporcionales
@@ -136,7 +147,7 @@ propSymbolsLayer(
 # Información de contexto
 layoutLayer(title = "Número de habitantes por sector catastral",
             sources = "Fuente: SISBEN (2016)",
-            author = paste0("Elaboración propia\nDatum:CTM12\nLibrería R: cartography ", 
+            author = paste0("Elaboración propia\nDatum: CTM12\nLibrería R: cartography ", 
                             packageVersion("cartography")),
             frame = FALSE, north = FALSE, tabtitle = TRUE)
 # Flecha norte
@@ -150,8 +161,11 @@ dev.off()
 
 
 # Guardar
-jpeg(filename = paste(rutas$figuras,"Coropletas por Quintiles.jpeg",sep=""), width = 180, height = 180,
-     units = "mm", res = 300)
+jpeg(filename = paste(rutas$figuras,"Coropletas por Quintiles.jpeg",sep=""), 
+     width = 150, 
+     height = 150,
+     units = "mm",
+     res = 300)
 
 
 plot(st_geometry(vias),
@@ -172,13 +186,14 @@ choroLayer(
   border = "black", 
   lwd = 0.5,
   legend.pos = "bottomright", 
-  legend.title.txt = "Población total\n(Clasificación por Quintiles)",
+  legend.title.txt = "Población total\n(Quintiles)",
   add = TRUE
 ) 
 # layout
 layoutLayer(title = "Número de habitantes por sector catastral",
             sources = "Fuente: SISBEN (2016)",
-            author = paste0("Elaboración propia\nDatum:CTM12\nLibrería R: cartography ", packageVersion("cartography")), 
+            author = paste0("Elaboración propia\nDatum: CTM12\nLibrería R: cartography ", 
+                            packageVersion("cartography")), 
             frame = FALSE, north = FALSE, tabtitle = TRUE)
 
 north(pos = "topleft")
@@ -190,8 +205,11 @@ dev.off()
  #                                     #
 
 # Guardar
-jpeg(filename = paste(rutas$figuras,"Coropletas por Quiebres de Pretty.jpeg",sep=""), width = 180, height = 180,
-     units = "mm", res = 300)
+jpeg(filename = paste(rutas$figuras,"Coropletas por Quiebres de Pretty.jpeg",sep=""),
+     width = 150, 
+     height = 150,
+     units = "mm", 
+     res = 300)
 
 
 plot(st_geometry(vias),
@@ -218,7 +236,8 @@ choroLayer(
 # layout
 layoutLayer(title = "Número de habitantes por sector catastral",
             sources = "Fuente: SISBEN (2016)",
-            author = paste0("Elaboración propia\nDatum:CTM12\nLibrería R: cartography ", packageVersion("cartography")), 
+            author = paste0("Elaboración propia\nDatum: CTM12\nLibrería R: cartography ",
+                            packageVersion("cartography")), 
             frame = FALSE, north = FALSE, tabtitle = TRUE)
 
 north(pos = "topleft")
